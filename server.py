@@ -24,7 +24,7 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.end_headers()
         self.wfile.write(bytes("<body>", "utf-8"))
-        self.wfile.write(bytes("<p><b>World</b></p>", "utf-8"))
+        self.wfile.write(bytes("<p><b>World!!!</b></p>", "utf-8"))
         self.wfile.write(bytes("</body></html>", "utf-8"))
     
     def do_POST(self):
