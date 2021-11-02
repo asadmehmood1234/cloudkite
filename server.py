@@ -1,6 +1,7 @@
 # Python 3 server example
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import time, urllib
+import time, urllib, json
+from io import BytesIO
 
 
 hostName = ""
@@ -27,12 +28,24 @@ class MyServer(BaseHTTPRequestHandler):
         self.wfile.write(bytes("<p><b>World!!!</b></p>", "utf-8"))
         self.wfile.write(bytes("</body></html>", "utf-8"))
     
+#    def do_POST(self):
+#      length = int(self.headers['Content-Length'])
+#      post_data = urllib.parse.parse_qs(self.rfile.read(length).decode('utf-8'))
+#    # You now have a dictionary of the post data
+#
+#      self.wfile.write(post_data.encode("utf-8"))
+#      #self.wfile.write(post_data["somevalue"])
+#
     def do_POST(self):
-      length = int(self.headers['Content-Length'])
-      post_data = urllib.parse.parse_qs(self.rfile.read(length).decode('utf-8'))
-    # You now have a dictionary of the post data
-
-      self.wfile.write(post_data.encode("utf-8"))
+        content_length = int(self.headers['Content-Length'])
+        body = self.rfile.read(content_length)
+        self.send_response(200)
+        self.end_headers()
+        response = BytesIO()
+        response.write(b'This is POST request. ')
+        response.write(b'Received: ')
+        response.write(body)
+        self.wfile.write(response.getvalue())
 
 if __name__ == "__main__":        
     webServer = HTTPServer((hostName,serverPort), MyServer)
